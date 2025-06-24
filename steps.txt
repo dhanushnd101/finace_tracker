@@ -1,0 +1,21 @@
+- Initilize the Docker application 
+- Create a docker volume called "finance_tracker_data_mysql". This will be used to persist the MySQL data.
+    docker volume create finance_tracker_data_mysql
+- Create a docker container called "finance_tracker_mysql"
+    docker run -d \
+        --name finance_tracker_mysql \
+        -e MYSQL_ROOT_PASSWORD=finance-secret-pw \
+        -e MYSQL_DATABASE=finance_tracker \
+        -e MYSQL_USER=finance_user \
+        -e MYSQL_PASSWORD=finance_pass \
+        -v finance_tracker_data_mysql:/var/lib/mysql \
+        -p 3306:3306 \
+        mysql:8.0
+- Run the seed script
+    make seed
+- Run the application
+    make run
+- Test the API
+    make test
+
+

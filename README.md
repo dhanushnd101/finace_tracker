@@ -1,6 +1,23 @@
-# Finance Tracker API
+# Finance Tracker - Full Stack Application
 
-A Flask-based REST API for managing user finances with JWT authentication.
+A full-stack application for managing personal finances with a Flask backend API and React frontend.
+
+## Project Structure
+
+This project is organized as a monorepo with separate frontend and backend directories:
+
+```
+finance_tracker/
+├── backend/           # Flask API
+│   ├── app/           # Flask application code
+│   ├── tests/         # Backend tests
+│   └── ...
+├── frontend/         # React frontend
+│   ├── public/        # Static assets
+│   ├── src/           # React source code
+│   └── ...
+└── ...
+```
 
 ## Features
 
@@ -11,24 +28,30 @@ A Flask-based REST API for managing user finances with JWT authentication.
 - JWT-based authentication
 - MySQL database with SQLAlchemy ORM
 - Transaction filtering and categorization
-- Flask-Migrate for database migrations
-- CORS support
-- Environment-based configuration
+- React frontend with component-based architecture
 - RESTful API design
 
 ## Prerequisites
 
 - Python 3.8+
+- Node.js 14+
 - MySQL Server
 - pip (Python package manager)
+- npm (Node.js package manager)
 
 ## Setup
 
-1. Clone the repository
-2. Create a virtual environment:
+### Backend Setup
+
+1. Navigate to the backend directory:
    ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: .\venv\Scripts\activate
+   cd backend
+   ```
+
+2. Create and activate a virtual environment:
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
    ```
 
 3. Install dependencies:
@@ -36,99 +59,74 @@ A Flask-based REST API for managing user finances with JWT authentication.
    pip install -r requirements.txt
    ```
 
-4. Create a `.env` file with your configuration:
-   ```
-   FLASK_APP=app
-   FLASK_ENV=development
-   SECRET_KEY=your-secret-key
-   JWT_SECRET_KEY=your-jwt-secret-key
-   DATABASE_URL=mysql+pymysql://username:password@localhost:3306/finance_tracker
+4. Set up environment variables:
+   ```bash
+   cp .env.example .env  # Then edit .env with your settings
    ```
 
-5. Initialize the database:
+5. Start the MySQL database:
    ```bash
-   flask db init
-   flask db migrate -m "Initial migration"
-   flask db upgrade
+   make startdb
    ```
 
-6. Seed the database with test data:
+6. Initialize the database:
    ```bash
-   python -m app.seed
+   make initdb
    ```
-   This will create:
-   - Admin user: admin/admin123
-   - Regular users: user1/user1123, user2/user2123
-   - Sample transactions for each user
 
-7. Run the development server:
+7. Seed the database with sample data:
    ```bash
-   flask run
+   make seed
    ```
+
+8. Run the backend server:
+   ```bash
+   make run
+   ```
+
+### Frontend Setup
+
+1. Navigate to the frontend directory:
+   ```bash
+   cd frontend
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Start the development server:
+   ```bash
+   npm start
+   ```
+
+4. The frontend will be available at http://localhost:3000
+
+## Development
+
+- Backend API runs on http://localhost:5000
+- Frontend development server runs on http://localhost:3000
+- API documentation is available in the backend README or via Postman collection
 
 ## Testing
 
-Run the test suite with:
-
+### Backend Tests
 ```bash
-pytest -v
+cd backend
+make test
 ```
 
-## API Documentation
-
-For more detailed API documentation, you can import the provided Postman collection.
-
-## API Endpoints
-
-### Authentication
-
-- `POST /api/auth/register` - Register a new user
-- `POST /api/auth/login` - Login and get access token
-- `GET /api/auth/me` - Get current user profile
-
-### Users (Admin only)
-
-- `GET /api/users` - Get all users
-- `GET /api/users/<user_id>` - Get user by ID
-- `PUT /api/users/<user_id>` - Update user
-- `DELETE /api/users/<user_id>` - Deactivate user
-- `POST /api/users/<user_id>/promote` - Promote user to admin
-
-### Transactions
-
-- `GET /api/transactions` - Get all transactions for current user
-  - Query params: `category`, `type` (income/expense), `start_date`, `end_date`
-- `GET /api/transactions/<transaction_id>` - Get transaction by ID
-- `POST /api/transactions` - Create new transaction
-- `PUT /api/transactions/<transaction_id>` - Update transaction
-- `DELETE /api/transactions/<transaction_id>` - Delete transaction
-
-## Transaction Types
-
-- `income` - Money received (salary, gifts, etc.)
-- `expense` - Money spent (bills, shopping, etc.)
-- `saving` - Money set aside for savings
-
-## Environment Variables
-
-Create a `.env` file in the root directory with the following variables:
-
-```
-FLASK_APP=run.py
-FLASK_ENV=development
-SECRET_KEY=your-secret-key-here
-JWT_SECRET_KEY=your-jwt-secret-key-here
-DATABASE_URL=mysql+pymysql://username:password@localhost:3306/finance_tracker
-```
-
-## Running Tests
-
-To run tests, use:
-
+### Frontend Tests
 ```bash
-python -m pytest
+cd frontend
+npm test
 ```
+
+## Deployment
+
+See the README files in the respective directories for deployment instructions.
 
 ## License
 
-This project is licensed under the MIT License.
+MIT

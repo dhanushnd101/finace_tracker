@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    environment:
+      - DATABASE_URL=mysql+pymysql://finance_user:finance_pass@db:3306/finance_tracker
+      - SECRET_KEY=your-secret-key
+      - JWT_SECRET_KEY=your-jwt-secret-key
+    depends_on:
+      - db
+    volumes:
+      - ./backend:/app
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
+  db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=finance-secret-pw
+      - MYSQL_DATABASE=finance_tracker
+      - MYSQL_USER=finance_user
+      - MYSQL_PASSWORD=finance_pass
+    volumes:
+      - finance_tracker_data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+
+volumes:
+  finance_tracker_data:
